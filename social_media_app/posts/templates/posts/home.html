@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+    {% for post in posts %}
+        <article class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="{% url 'user_profile' post.author.username %}">{{ post.author }}</a>
+              <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
+            </div>
+            <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
+            <p class="article-content">{{ post.content }}</p>
+            <div>
+              <a href="{% url 'like-post' post.id %}" class="btn btn-primary btn-sm">
+                {% if user in post.likes.all %}
+                  Unlike
+                {% else %}
+                  Like
+                {% endif %}
+              </a>
+              <span class="text-muted">{{ post.likes.count }}</span>
+            </div>
+          </div>
+        </article>
+    {% endfor %}
+{% endblock content %}

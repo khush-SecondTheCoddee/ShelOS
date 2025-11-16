@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+  <article class="media content-section">
+    <div class="media-body">
+      <div class="article-metadata">
+        <a class="mr-2" href="{% url 'user_profile' object.author.username %}">{{ object.author }}</a>
+        <small class="text-muted">{{ object.date_posted|date:"F d, Y" }}</small>
+        {% if object.author == user %}
+          <div>
+            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'post-update' object.id %}">Update</a>
+            <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'post-delete' object.id %}">Delete</a>
+          </div>
+        {% endif %}
+      </div>
+      <h2 class="article-title">{{ object.title }}</h2>
+      {% if object.image %}
+        <img src="{{ object.image }}" class="img-fluid">
+      {% endif %}
+      <p class="article-content">{{ object.content }}</p>
+      <div>
+        <a href="{% url 'like-post' object.id %}" class="btn btn-primary btn-sm">
+          {% if user in object.likes.all %}
+            Unlike
+          {% else %}
+            Like
+          {% endif %}
+        </a>
+        <span class="text-muted">{{ object.likes.count }}</span>
+      </div>
+    </div>
+  </article>
+
+  <hr>
+
+  <div class="content-section">
+    <h3>Comments</h3>
+    <a class="btn btn-primary btn-sm" href="{% url 'add-comment-to-post' object.id %}">Add Comment</a>
+    <hr>
+    {% for comment in object.comments.all %}
+      <article class="media">
+        <div class="media-body">
+          <div class="article-metadata">
+            <a class="mr-2" href="{% url 'user_profile' comment.author.username %}">{{ comment.author }}</a>
+            <small class="text-muted">{{ comment.date_posted|date:"F d, Y" }}</small>
+          </div>
+          <p class="article-content">{{ comment.content }}</p>
+        </div>
+      </article>
+    {% empty %}
+      <p>No comments yet.</p>
+    {% endfor %}
+  </div>
+{% endblock content %}

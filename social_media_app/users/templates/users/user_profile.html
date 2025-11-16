@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="content-section">
+    <div class="media">
+      <img class="rounded-circle account-img" src="{{ user.profile.profile_picture }}">
+      <div class="media-body">
+        <h2 class="account-heading">
+          {{ user.username }}
+          {% if user.profile.is_admin %}
+            <span class="badge badge-success">Verified</span>
+          {% endif %}
+        </h2>
+        <p class="text-secondary">{{ user.email }}</p>
+        {% if user != request.user %}
+          {% if is_following %}
+            <a href="{% url 'unfollow' user.username %}" class="btn btn-danger">Unfollow</a>
+          {% else %}
+            <a href="{% url 'follow' user.username %}" class="btn btn-primary">Follow</a>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock content %}
